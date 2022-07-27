@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DotNet6_WebAPI_Demo.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Produces("application/json")]
 public class SuperHeroController : ControllerBase
 {
     /*
