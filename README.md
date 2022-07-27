@@ -1,4 +1,4 @@
-# DotNet6_WebAPI_Demo
+# DotNet6_WebAPI_Demo **CRUD**
 
 ## Install Package
 	-	Microsoft.EntityFrameworkCore.Design
