@@ -23,18 +23,28 @@ public class SuperHeroController : ControllerBase
                 Place="Long Island"
             }
         };
+    private readonly DataContext _context;
+
+    public SuperHeroController(DataContext context)
+    {
+        _context = context;
+    }
 
     [HttpGet]
     //public async Task<IActionResult> Get()
     public async Task<ActionResult<List<SuperHero>>> Get()
     {
-        return Ok(heroes);
+        //return Ok(heroes);
+        return Ok(await _context.SuperHeroes.ToListAsync());
+
     }
     [HttpGet("{id}")]
     //public async Task<IActionResult> Get()
     public async Task<ActionResult<SuperHero>> Get(int id)
     {
-        var hero = heroes.Find(hero => hero.Id == id);
+        //var hero = heroes.Find(hero => hero.Id == id);
+        var hero = await _context.SuperHeroes.FindAsync(id);
+
         if (hero == null)
             return BadRequest("Hero not found.");
         return Ok(hero);
@@ -42,8 +52,18 @@ public class SuperHeroController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<List<SuperHero>>> addHero([FromBody]SuperHero hero)
     {
-        heroes.Add(hero);
-        return Ok(heroes);
+        //heroes.Add(hero);
+        //return Ok(heroes);
+        try
+        {
+            _context.SuperHeroes.Add(hero);
+            await _context.SaveChangesAsync();
+        }
+        catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        return Ok(await _context.SuperHeroes.ToListAsync());
     }
     [HttpPut]
     public async Task<ActionResult<List<SuperHero>>> updateHero([FromBody] SuperHero heroRequest)
